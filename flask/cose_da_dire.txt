@@ -1,0 +1,1 @@
+Da cancellare tabella appuntamento --> modificare type dataapp con "timestamp"
