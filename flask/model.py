@@ -14,14 +14,10 @@ appuntamento = Table('appuntamento',metadata, autoload_with=engine)
 categoria = Table('categoria',metadata, autoload_with=engine)
 cliente = Table('cliente',metadata, autoload_with=engine)
 clienteappuntamento = Table('clienteappuntamento',metadata, autoload_with=engine)
-#comune = Table('comune',metadata, autoload_with=engine)
 contatto = Table('contatto',metadata, autoload_with=engine)
 it_table = Table('it',metadata, autoload_with=engine)
-
 partecipanti = Table('partecipanti',metadata, autoload_with=engine)
 portafoglio = Table('portafoglio',metadata, autoload_with=engine)
-#presidio = Table('presidio',metadata, autoload_with=engine)
-#regione = Table('regione',metadata, autoload_with=engine)
 tipocliente = Table('tipocliente',metadata, autoload_with=engine)
 trattativa = Table('trattativa',metadata, autoload_with=engine)
 trattativaappuntamento = Table('trattativaappuntamento',metadata, autoload_with=engine)
@@ -36,11 +32,10 @@ class User(UserMixin):
         self.idport = 0
         res =conn.execute(select(utente.c.nome, utente.c.cognome).where(utente.c.email==email)).fetchone()._asdict()
 	
-        res2 = conn.execute(select(portafoglio.c.idportafoglio).where(portafoglio.c.idutente == id).order_by(portafoglio.c.idportafoglio.desc())).fetchone()[0]
+        res2 = conn.execute(select(portafoglio.c.idportafoglio).where(portafoglio.c.idutente == id).order_by(portafoglio.c.idportafoglio.desc())).fetchone()
         print(res2)
         if not (res2 is None):
-            res2 = res2
-        self.idport = res2
+            self.idport = res2[0]
         print("test id inside")
         print(self.idport)
         print(res)

@@ -93,14 +93,14 @@ def goToPortafoglio(id):
     # chiamata da fare successivamente quando verrà cambiata l'interfaccia grafica, permette di ricevere tutte le trattative dato un cliente
     return redirect(url_for('.home',idPort = id, id = 0))
 
-@portafoglio_bp.route('/getCliente', methods=['POST'])
+@portafoglio_bp.route('/getCliente/<int:id>', methods=['POST'])
 @login_required
-def getCliente():
-    #print(request.form)
-    idPort = request.form['idPort']
-    id=request.form['idSearch']
-    current_user.idport = idPort
-    return redirect(url_for('.home',idPort = idPort, id = id))
+def getCliente(id):
+    print("idcliente")
+    print(id)
+    print("sono qui")
+
+    return redirect(url_for('.home',idPort = current_user.idport, id = id))
 
 @portafoglio_bp.route('/remove/<int:id>', methods=['POST'])
 @login_required
@@ -291,6 +291,7 @@ def modifyTrattativa(id):
                 fornitore = fornitore
             )
         )
+        conn.commit()
         
         print("tutto bvene")
     except Exception as error:
@@ -348,6 +349,7 @@ def modifyCliente():
                 fatturatotim = fatturatoTim,
             )
         )
+        conn.commit()
         print("tutto bvene")
     except Exception as error:
         print("rip")
@@ -423,7 +425,7 @@ def addTrattativaForm():
             inpaf = 1,
             fornitore = fornitore
         ))
-        
+        conn.commit()
         print("tutto bene add")
     except Exception as error:
         print("rip")
@@ -458,7 +460,7 @@ def addItForm():
             canoneannuo = canoneAnnuo,
             canonemese = canoneMese
         ))
-        
+        conn.commit()
         print("tutto bene add")
     except Exception as error:
         print("rip")
@@ -470,6 +472,7 @@ def addItForm():
 
 @portafoglio_bp.route('/modifyIt/<int:id>', methods=['POST'])
 def modifyIt(id):
+    print(request.form)
     idcliente = request.form['idClienteModifyIt']
     servizio = request.form['servizioModify']
     quantita = request.form['quantitaModify']
@@ -489,6 +492,7 @@ def modifyIt(id):
             canoneannuo = canoneannuo,
             canonemese = canonemese
         ).where(it_table.c.idit == id))
+        conn.commit()
     except Exception as error:
         print("rip")
         print(error)
@@ -502,6 +506,7 @@ def deleteIt(id):
     try:
         idcliente= conn.execute(select(it_table.c.idcliente).where(it_table.c.idit == id)).fetchone()[0]
         conn.execute(delete(it_table).where(it_table.c.idit == id))
+        conn.commit()
     except Exception as error:
         print("rip")
         print(error)

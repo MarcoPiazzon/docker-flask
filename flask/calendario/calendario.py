@@ -9,6 +9,7 @@ from datetime import date
 titolo = "Calendario"
 
 @calendario_bp.route('/')
+@login_required
 def home():
     #events = conn.execute(select(appuntamento, utente.c.nome, utente.c.cognome).select_from(join(appuntamento, utente, appuntamento.c.idUtenteCreazione == utente.c.idUtente))).fetchall()
     events = conn.execute(
@@ -73,6 +74,7 @@ def addAppuntamento():
                 dataapp = dataApp,
             )
         )
+        
         print("sto provando")
         #lastId = conn.execute(select(func.max(trattativa.c.idtrattativa))).fetchone()
         print(idTrattativa)
@@ -82,6 +84,7 @@ def addAppuntamento():
             idtrattativa = idTrattativa,
             idappuntamento = id.inserted_primary_key[0]
         ))
+        conn.commit()
         print("tutto bvene")
         res = conn.execute(select(trattativaappuntamento)).fetchall()
         print(res)
@@ -133,6 +136,7 @@ def modifyAppuntamento():
         conn.execute(update(trattativaappuntamento).where(trattativaappuntamento.c.idappuntamento == idapp).values(
             idtrattativa = idtrattativa
         ))
+        conn.commit()
         print("tutto bvene")
         global message
         message = "Appuntamento modificato"
